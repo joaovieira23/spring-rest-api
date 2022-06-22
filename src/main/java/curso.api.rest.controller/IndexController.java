@@ -2,15 +2,19 @@ package curso.api.rest.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import curso.api.rest.model.Usuario;
+import curso.api.rest.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping(value = "/usuario")
@@ -24,26 +28,23 @@ public class IndexController {
     //     return new ResponseEntity<>("Olá Usuário REST Spring Boot seu nome é: " + nome + " salario é: " + salario, HttpStatus.OK);
     // }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<Usuario> init() {
+    @Autowired /* Se fosse CDI seria @Inject */
+    private UsuarioRepository usuarioRepository;
 
-        Usuario usuario = new Usuario();
-        usuario.setId(50L);
-        usuario.setLogin("joaovictorvieira.23@hotmail.com");
-        usuario.setNome("João Victor Vieira");
-        usuario.setSenha("5454458");
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<Usuario> init(@PathVariable (value = "id") Long id) {
 
-        Usuario usuario2 = new Usuario();
-        usuario2.setId(50L);
-        usuario2.setLogin("jones.23@hotmail.com");
-        usuario2.setNome("Jones Andrade");
-        usuario2.setSenha("1564863");
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-        List<Usuario> usuarios = new ArrayList<Usuario>();
-        usuarios.add(usuario);
-        usuarios.add(usuario2);
 
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
         // return ResponseEntity.ok(usuarios);
+    }
+
+    @GetMapping(value = "/", produces = "application/json")
+    public ResponseEntity<List<Usuario>> usuarios () {
+        List<Usuario> list = usuarioRepository.findAll();
+
+        return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
     }
 }
