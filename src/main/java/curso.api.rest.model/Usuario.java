@@ -46,6 +46,14 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public boolean equals(Object obj) {
         if(this == obj) return true;
         if(obj == null) return false;
