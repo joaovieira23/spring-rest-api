@@ -31,12 +31,12 @@ public class IndexController {
     @Autowired /* Se fosse CDI seria @Inject */
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/pdf")
     public ResponseEntity<Usuario> init(@PathVariable (value = "id") Long id) {
 
         Optional<Usuario> usuario = usuarioRepository.findById(id);
 
-
+        /* O retorno seria um relatório */
         return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
         // return ResponseEntity.ok(usuarios);
     }
